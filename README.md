@@ -1,1 +1,1 @@
-# Original de Paint.py
+# Original de Pacman.py
