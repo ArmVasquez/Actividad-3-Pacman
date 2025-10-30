@@ -20,10 +20,10 @@ writer = Turtle(visible=False)
 aim = vector(5, 0)
 pacman = vector(-40, -80)
 ghosts = [
-    [vector(-180, 160), vector(5, 0)],
-    [vector(-180, -160), vector(0, 5)],
-    [vector(100, 160), vector(0, -5)],
-    [vector(100, -160), vector(-5, 0)],
+    [vector(-180, 160), vector(15, 0)],
+    [vector(-180, -160), vector(0, 15)],
+    [vector(100, 160), vector(0, -15)],
+    [vector(100, -160), vector(-15, 0)],
 ]
 # fmt: off
 tiles = [
@@ -91,7 +91,7 @@ def valid(point):
 def world():
     """Draw world using path."""
     bgcolor('black')
-    path.color('blue')
+    path.color('red')
 
     for index in range(len(tiles)):
         tile = tiles[index]
@@ -135,10 +135,10 @@ def move():
             point.move(course)
         else:
             options = [
-                vector(5, 0),
-                vector(-5, 0),
-                vector(0, 5),
-                vector(0, -5),
+                vector(15, 0),
+                vector(-15, 0),
+                vector(0, 15),
+                vector(0, -15),
             ]
             plan = choice(options)
             course.x = plan.x
@@ -154,7 +154,7 @@ def move():
         if abs(pacman - point) < 20:
             return
 
-    ontimer(move, 100)
+    ontimer(move, 50)
 
 
 def change(x, y):
