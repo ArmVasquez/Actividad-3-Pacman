@@ -114,7 +114,7 @@ def choose_smart_direction(point, course, target, randomness=0.2):
 def world():
     """Draw world using path."""
     bgcolor('black')
-    path.color('red')
+    path.color('blue')
 
     for index in range(len(tiles)):
         tile = tiles[index]
