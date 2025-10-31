@@ -1,19 +1,14 @@
-"""Pacman, classic arcade game.
-
-Exercises
-
-1. Change the board.
-2. Change the number of ghosts.
-3. Change where pacman starts.
-4. Make the ghosts faster/slower.
-5. Make the ghosts smarter.
-"""
+# Descripcion: PACMAN con inteligencia mejorada
+# Autores: Armando Vasquez Ambrocio | A01669283
+#          Diana Karen Barrales Victorio | A018022299
+# Fecha de modificacion: 30/10/2025
 
 from random import choice, random
 from turtle import *
 
 from freegames import floor, vector
 
+# Variables de estado inicial
 state = {'score': 0}
 path = Turtle(visible=False)
 writer = Turtle(visible=False)
@@ -25,6 +20,8 @@ ghosts = [
     [vector(100, 160), vector(0, -15)],
     [vector(100, -160), vector(-15, 0)],
 ]
+
+# Mapa del juego
 # fmt: off
 tiles = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -50,7 +47,7 @@ tiles = [
 ]
 # fmt: on
 
-
+# Dibuja un cuadrado en la posición (x,y) con path
 def square(x, y):
     """Draw square using path at (x, y)."""
     path.up()
@@ -64,7 +61,7 @@ def square(x, y):
 
     path.end_fill()
 
-
+# Convierte una posicion a un arreglo lineal de 20x20
 def offset(point):
     """Return offset of point in tiles."""
     x = (floor(point.x, 20) + 200) / 20
@@ -72,7 +69,7 @@ def offset(point):
     index = int(x + y * 20)
     return index
 
-
+# Determina si point es una posicion valida. Regresa true si la posicion es valida. 
 def valid(point):
     """Return True if point is valid in tiles."""
     index = offset(point)
@@ -87,13 +84,16 @@ def valid(point):
 
     return point.x % 20 == 0 or point.y % 20 == 0
 
+# Genera desplazamientos que llevan a celdas validas. Regresa vectores validos para point
 def neighbors(point):
     dirs = [vector(5, 0), vector(-5, 0), vector(0, 5), vector(0, -5)]
     return [d for d in dirs if valid(point +d)]
 
+# Detecta si la posicion point es una intersección
 def is_intersection(point):
     return point.x % 20 == 0 and point.y % 20 == 0
 
+# Elige una direccion considerando si existen muros, no retrocediendo y se minimiza la distancia a target. Regresa un vector con la direccion a tomar
 def choose_smart_direction(point, course, target, randomness=0.2):
     options = neighbors(point)
     if not options:
@@ -111,6 +111,7 @@ def choose_smart_direction(point, course, target, randomness=0.2):
 
     return min(options, key=score)
 
+# Dibuja el laberinto y los punto dentro del mapa con path
 def world():
     """Draw world using path."""
     bgcolor('black')
@@ -129,7 +130,7 @@ def world():
                 path.goto(x + 10, y + 10)
                 path.dot(2, 'white')
 
-
+# Mueve a Pacman ya los fantasmas, tambien maneja las colisiones, y el sistema de puntuacion
 def move():
     """Move pacman and all ghosts."""
     writer.undo()
@@ -187,14 +188,14 @@ def move():
 
     ontimer(move, 50)
 
-
+# Cambia la direccion de Pacman si es valida
 def change(x, y):
     """Change pacman aim if valid."""
     if valid(pacman + vector(x, y)):
         aim.x = x
         aim.y = y
 
-
+# Configuracion de la ventana
 setup(420, 420, 370, 0)
 hideturtle()
 tracer(False)
@@ -202,6 +203,8 @@ writer.goto(160, 160)
 writer.color('white')
 writer.write(state['score'])
 listen()
+
+# Controles
 onkey(lambda: change(5, 0), 'Right')
 onkey(lambda: change(-5, 0), 'Left')
 onkey(lambda: change(0, 5), 'Up')
