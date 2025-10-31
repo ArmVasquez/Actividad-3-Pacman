@@ -20,10 +20,10 @@ writer = Turtle(visible=False)
 aim = vector(5, 0)
 pacman = vector(-40, -80)
 ghosts = [
-    [vector(-180, 160), vector(5, 0)],
-    [vector(-180, -160), vector(0, 5)],
-    [vector(100, 160), vector(0, -5)],
-    [vector(100, -160), vector(-5, 0)],
+    [vector(-180, 160), vector(15, 0)],
+    [vector(-180, -160), vector(0, 15)],
+    [vector(100, 160), vector(0, -15)],
+    [vector(100, -160), vector(-15, 0)],
 ]
 # fmt: off
 tiles = [
@@ -114,7 +114,7 @@ def choose_smart_direction(point, course, target, randomness=0.2):
 def world():
     """Draw world using path."""
     bgcolor('black')
-    path.color('blue')
+    path.color('red')
 
     for index in range(len(tiles)):
         tile = tiles[index]
@@ -154,11 +154,26 @@ def move():
     dot(20, 'yellow')
 
     for point, course in ghosts:
+
+        if valid(point + course):
+            point.move(course)
+        else:
+            options = [
+                vector(15, 0),
+                vector(-15, 0),
+                vector(0, 15),
+                vector(0, -15),
+            ]
+            plan = choice(options)
+            course.x = plan.x
+            course.y = plan.y
+
         if not valid(point + course) or is_intersection(point):
             plan = choose_smart_direction(point, course, pacman, randomness=0.2)
             course.x, course.y = plan.x, plan.y
         
         point.move(course)
+
 
         up()
         goto(point.x + 10, point.y + 10)
@@ -170,7 +185,7 @@ def move():
         if abs(pacman - point) < 20:
             return
 
-    ontimer(move, 100)
+    ontimer(move, 50)
 
 
 def change(x, y):
